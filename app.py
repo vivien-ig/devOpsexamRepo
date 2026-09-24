@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-
+# Python Docker CI/CD application
 app = Flask(__name__)
 todo_list = []
 
