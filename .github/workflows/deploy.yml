@@ -1,0 +1,31 @@
+name: Python Container CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # Step 1: Builds the Docker image
+    - name: Build Docker Image
+      run: |
+        docker build -t my-python-web-server:latest .
+
+    # Step 2: Runs the Docker container
+    - name: Run Docker Container
+      run: |
+        docker run -d -p 5000:5000 --name web_server_instance my-python-web-server:latest
+        # Give the container 3 seconds to spin up completely
+        sleep 3
+
+    # Step 3: Verifies that the Python web server is running successfully
+    - name: Verify Web Server Status
+      run: |
+        # Use curl to check if the local web port responds with an HTTP 200 status
+        curl --fail http://localhost:5000 || exit 1
